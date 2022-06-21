@@ -1,3 +1,5 @@
+import 'dart:math';
+
 int size = 100;
 
 class Point {
@@ -9,11 +11,20 @@ class Point {
     this.y = y;
   }
 
+  num distance(Point a) {
+    num d = pow((pow((a.x - this.x), 2) + pow((a.y - this.y), 2)), 0.5);
+    return d;
+  }
+
+  bool isBetween(Point a, Point b) {
+    return this.distance(a) + this.distance(b) == a.distance(b);
+  }
+
   bool touche(wall) {
-    int x1 = wall.A.x;
-    int y1 = wall.A.y;
-    int x2 = wall.B.x;
-    int y2 = wall.B.y;
+    int x1 = wall.a.x;
+    int y1 = wall.a.y;
+    int x2 = wall.b.x;
+    int y2 = wall.b.y;
     int x3 = this.x;
     int y3 = this.y;
     int x4 = x3 + size;
@@ -39,18 +50,22 @@ class Point {
       if (this.touche(wall)) {
         c = !c;
       }
+      else if (this.isBetween(wall.a, wall.b)) {
+        return true;
+      }
     }
+
     return c;
   }
 }
 
 class Wall {
-  late Point A;
-  late Point B;
+  late Point a;
+  late Point b;
 
-  Wall(Point A, Point B) {
-    this.A = A;
-    this.B = B;
+  Wall(Point a, Point b) {
+    this.a = a;
+    this.b = b;
   }
 }
 
@@ -65,8 +80,8 @@ class Polygon {
 
   void createWalls() {
     for (var i = 0; i < this.vertexList.length; i++) {
-      Wall w = new Wall(
-          this.vertexList[i], this.vertexList[(i + 1) % this.vertexList.length]);
+      Wall w = new Wall(this.vertexList[i],
+          this.vertexList[(i + 1) % this.vertexList.length]);
       this.walls.add(w);
     }
   }
