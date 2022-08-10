@@ -1,4 +1,4 @@
-//import 'package:henneth/henneth.dart';
+import 'package:henneth/henneth.dart';
 
 import 'dart:html';
 
@@ -12,6 +12,8 @@ void main() {
   var linePos = [];
   var polyList = [];
   var pointList = [];
+  var xList = [];
+  var yList = [];
   MouseMode mouse = MouseMode("click");
   var placePoint = (querySelector('#placePoint') as ButtonInputElement);
   var placePoly = (querySelector('#placePoly') as ButtonInputElement);
@@ -33,6 +35,8 @@ void main() {
     linePos = [];
     polyList = [];
     pointList = [];
+    xList = [];
+    yList = [];
   });
 
   placePoint.onClick.listen((_) {
@@ -70,7 +74,7 @@ void main() {
       run.style.display = "block";
       clear.style.display = "block";
       ctx.moveTo(linePos[0][0], linePos[0][1]);
-      ctx.lineTo(polyList[0][0], polyList[0][1]);
+      ctx.lineTo(polyList[0].x, polyList[0].y);
       ctx.stroke();
     }
     print(mouse.mode);
@@ -86,6 +90,8 @@ void main() {
       findCoordinates(event);
       print(pos);
       pointList.add(pos);
+      xList.add(pos[0]);
+      yList.add(pos[1]);
       ctx.beginPath();
       ctx.setFillColorRgb(255, 0, 0);
       ctx.ellipse(pos[0], pos[1], 5, 5, 0, 0, 360, false);
@@ -94,7 +100,7 @@ void main() {
     }
     if (mouse.mode == 'poly') {
       findCoordinates(event);
-      polyList.add(pos);
+      polyList.add(Point(pos[0],pos[1]));
       if (linePos.length < 2) {
         linePos.add(pos);
       }
@@ -109,5 +115,14 @@ void main() {
   });
 
   run.onClick.listen((event) {
-    print(pointList);});
+    Polygon poly = Polygon(polyList);
+    var lf = poly.containsPoints(xList, yList);
+    for (int i in lf) {
+      ctx.beginPath();
+      ctx.setFillColorRgb(0, 255, 0);
+      ctx.ellipse(xList[i], yList[i], 5, 5, 0, 0, 360, false);
+      ctx.fill();
+      ctx.stroke();
+    }
+  });
 }
