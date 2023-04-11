@@ -26,6 +26,20 @@ void main() {
       expect(point4.isInside(poly), isTrue);
     });
 
+    test('point_alligned', () {
+      var polygonPointList = [
+        Point(200, 0),
+        Point(200, 10),
+        Point(1, 5),
+      ];
+      var point = Point(0, 5);
+      Polygon poly = new Polygon(polygonPointList);
+      expect(point.isInside(poly), isFalse);
+
+    });
+
+
+
     test('U shape', () {
       var polygonPointList = [
         Point(0, 0),

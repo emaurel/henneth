@@ -93,14 +93,14 @@ void main() {
       xList.add(pos[0]);
       yList.add(pos[1]);
       ctx.beginPath();
-      ctx.setFillColorRgb(255, 0, 0);
+      ctx.setFillColorRgb(0, 0, 0);
       ctx.ellipse(pos[0], pos[1], 5, 5, 0, 0, 360, false);
       ctx.fill();
       ctx.stroke();
     }
     if (mouse.mode == 'poly') {
       findCoordinates(event);
-      polyList.add(Point(pos[0],pos[1]));
+      polyList.add(Point(pos[0], pos[1]));
       if (linePos.length < 2) {
         linePos.add(pos);
       }
@@ -117,9 +117,14 @@ void main() {
   run.onClick.listen((event) {
     Polygon poly = Polygon(polyList);
     var lf = poly.containsPoints(xList, yList);
-    for (int i in lf) {
+    for (int i = 0; i < xList.length; i++) {
       ctx.beginPath();
-      ctx.setFillColorRgb(0, 255, 0);
+      if (lf.contains(i)) {
+        ctx.setFillColorRgb(0, 255, 0);
+      }
+      else {
+        ctx.setFillColorRgb(255, 0, 0);
+      }
       ctx.ellipse(xList[i], yList[i], 5, 5, 0, 0, 360, false);
       ctx.fill();
       ctx.stroke();

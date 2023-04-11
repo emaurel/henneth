@@ -36,8 +36,13 @@ class Point {
     double t = (((x1 - x3) * (y3 - y4) - ((y1 - y3) * (x3 - x4)))) / d;
     double u = (((x1 - x3) * (y1 - y2)) - ((y1 - y3) * (x1 - x2))) / d;
 
-    if (0 <= t && t <= 1 && 0 < u) {
-      return true;
+    if (0 < t && t < 1 && 0 < u) {
+      Point intersection = Point(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
+      if (intersection.x == x1 || intersection.x == x2) {
+        return false;
+      } else {
+        return true;
+      }
     }
     return false;
   }
